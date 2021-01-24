@@ -3,9 +3,9 @@
 Version 2.0 of my homemade CO2 monitor uses the SCD-30 sensor and multiple @adafruit's feather boards. Every 30 seconds data is logged on to an SD-Card. 
 With classrooms being a source of COVID-19 outbreaks I wanted to make use of C02 level readings to gauge how well a classroom with 27 kids might be ventilated.
 
-![Screenshot of emptyExample](emptyExample.png)
-![Screenshot of emptyExample](emptyExample.png)
-![Screenshot of emptyExample](emptyExample.png)
+![One full school day](https://github.com/stephanschulz/co2-monitor/blob/main/co2_graph_2021-01-22.png)
+![Front](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_19241.jpg)
+![Back](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_19251.jpg)
 
 The Arduino for the feather M4 express reads and records the CO2 levels, temperature, relative humidity, current time, and battery voltage.
 
