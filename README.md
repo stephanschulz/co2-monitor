@@ -17,15 +17,15 @@ The Arduino for the feather M4 express reads and records the CO2 levels, tempera
 - RTClib.h
 
 # Bill Of Materials
-1. [Adafruit SCD-30 - NDIR CO2] (https://www.adafruit.com/product/4867)
-2. [Feather M4 Express] (https://www.adafruit.com/product/3857)
-3. [Battery - 3.7v 2000mAh] (https://www.adafruit.com/product/2011)
-4. [FeatherWing 128x32 OLED] (https://www.adafruit.com/product/2900)
-5. [Qwiic JST SH 4-Pin Cable] (https://www.adafruit.com/product/4399)
-6. [Adalogger FeatherWing - RTC + SD Add-on] (https://www.adafruit.com/product/2922)
-7. [8 GB sd card] (https://www.adafruit.com/product/1294)
-8. [CR1220 3V Coin Cell Battery] (https://www.adafruit.com/product/380)
-9. [Quad 2x2 FeatherWing Kit] (https://www.adafruit.com/product/4253)
+1. [Adafruit SCD-30 - NDIR CO2](https://www.adafruit.com/product/4867)
+2. [Feather M4 Express](https://www.adafruit.com/product/3857)
+3. [Battery - 3.7v 2000mAh](https://www.adafruit.com/product/2011)
+4. [FeatherWing 128x32 OLED](https://www.adafruit.com/product/2900)
+5. [Qwiic JST SH 4-Pin Cable](https://www.adafruit.com/product/4399)
+6. [Adalogger FeatherWing - RTC + SD Add-on](https://www.adafruit.com/product/2922)
+7. [8 GB sd card](https://www.adafruit.com/product/1294)
+8. [CR1220 3V Coin Cell Battery](https://www.adafruit.com/product/380)
+9. [Quad 2x2 FeatherWing Kit](https://www.adafruit.com/product/4253)
 
 # Tutorials used
 - https://learn.adafruit.com/adafruit-scd30
