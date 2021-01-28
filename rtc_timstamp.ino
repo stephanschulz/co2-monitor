@@ -61,3 +61,22 @@ void setup_rtc() {
   Serial.print("Offset is "); Serial.println(offset); // Print to control offset
 
 }
+
+void loop_rtc() {
+//  DateTime time = rtc.now();
+
+  /*
+    //Full Timestamp
+    Serial.println(String("DateTime::TIMESTAMP_FULL:\t")+time.timestamp(DateTime::TIMESTAMP_FULL));
+
+    //Date Only
+    Serial.println(String("DateTime::TIMESTAMP_DATE:\t")+time.timestamp(DateTime::TIMESTAMP_DATE));
+
+    //Full Timestamp
+    Serial.println(String("DateTime::TIMESTAMP_TIME:\t")+time.timestamp(DateTime::TIMESTAMP_TIME));
+
+    Serial.println("\n");
+  */
+  //Delay 5s
+  // delay(5000);
+}

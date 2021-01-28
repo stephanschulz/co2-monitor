@@ -21,7 +21,7 @@ Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
 boolean initDone;
 unsigned long initTimer;
 
-float verNumber = 2.0;
+float verNumber = 1.4;
 
 const int ledPin =  13;      // the number of the LED pin
 
@@ -33,11 +33,9 @@ long previousMillis = 0;        // will store last time LED was updated
 // will quickly become a bigger number than can be stored in an int.
 long interval = 1000;           // interval at which to blink (milliseconds)
 
-//how often to writing data to SD card
-unsigned long writeInterval = 30000;
+unsigned long writeInterval = 5000; //30000;
 unsigned long writeTimer;
 
-//how often to check sensor reading
 unsigned long checkInterval = 2000;
 unsigned long checkTimer;
 
@@ -102,7 +100,6 @@ void setup(void) {
 
 void loop() {
 
-  //after 5 seconds write some info to the computer if connected via USB
   if ( initDone == false &&  millis() - initTimer > 5000) {
     initDone = true;
 
@@ -140,8 +137,17 @@ void loop() {
   if (millis() - checkTimer > checkInterval) {
     checkTimer = millis();
 
+    //        loop_rtc();
+    //    loop_sd();
+
     display.clearDisplay();
+    //    display.setCursor(0, 0);
+
     display.setTextSize(1);
+    //    display.setCursor(0, 0);
+    //    display.print("v:");
+    //    display.setCursor(10, 0);
+    //    display.println(verNumber, 1);
 
     DateTime now = rtc.now();
     display.setCursor(0, 0);
@@ -151,6 +157,9 @@ void loop() {
     measuredvbat *= 2;    // we divided by 2, so multiply back
     measuredvbat *= 3.3;  // Multiply by 3.3V, our reference voltage
     measuredvbat /= 1024; // convert to voltage
+    //    Serial.print("VBat: " );
+    //    Serial.println(measuredvbat);
+
 
     display.setCursor(55, 0);
     display.println(measuredvbat);
@@ -160,7 +169,13 @@ void loop() {
 
 #ifdef USE_SCD30
 
+
     if (scd30.dataReady()) {
+      //      display.clearDisplay();
+      //      display.setCursor(0, 0);
+
+
+
       Serial.println("Data available!");
 
       if (!scd30.read()) {
@@ -179,6 +194,17 @@ void loop() {
       Serial.print(cur_co2, 3);
       Serial.println(" ppm");
       Serial.println("");
+
+      //      display.setTextSize(1);
+
+
+      //    display.setCursor(90, 5);
+      //    display.print("V:");
+      //    display.setCursor(100, 5);
+      //    display.println(measuredvbat);
+
+      //    display.display();
+
 
       if (cur_co2 > 0 && millis() - writeTimer > writeInterval) {
         writeTimer = millis();
@@ -207,6 +233,14 @@ void loop() {
     display.setCursor(15, 15);
     display.print(cur_co2, 1);
 
+    //#ifdef USE_SCD30
+    //    if (scd30.eCO2 > 0) {
+    //      //      logTo_sd(measuredvbat, scd30.eCO2, scd30.temperature, scd30.relative_humidity);
+    //    }
+    //#else
+    //    logTo_sd(measuredvbat, 123.45, 2, 3);
+    //#endif
+
     display.display();
 
   } //end if (millis() - writeTimer > writeInterval)
@@ -215,11 +249,18 @@ void loop() {
 
   blink_it();
 
+  //  delay(100);
 }
 
 void blink_it()
 {
-  // blink the LED as signle that all is good and running
+
+  // here is where you'd put code that needs to be running all the time.
+
+  // check to see if it's time to blink the LED; that is, if the
+  // difference between the current time and last time you blinked
+  // the LED is bigger than the interval at which you want to
+  // blink the LED.
   unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis > interval) {
