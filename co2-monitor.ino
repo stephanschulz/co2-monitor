@@ -28,8 +28,6 @@ Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
 boolean initDone;
 unsigned long initTimer;
 
-
-
 const int ledPin =  13;      // the number of the LED pin
 
 // Variables will change:
@@ -83,8 +81,8 @@ void setup(void) {
   pinMode(BUTTON_A, INPUT_PULLUP);
   pinMode(BUTTON_B, INPUT_PULLUP);
   pinMode(BUTTON_C, INPUT_PULLUP);
-
-
+  //  bSetupMode = false;
+  //  setupStage = -1;
 
   if (!scd30.setMeasurementInterval(2)) {
     Serial.println("Failed to set measurement interval");
@@ -93,6 +91,11 @@ void setup(void) {
     }
   }
 
+  //only set those once, NOT every time we start the device
+  //  scd30.setAltitudeOffset(233); //in Montreal 233 m above sea level
+//    scd30.setTemperatureOffset(1200);
+  // 1015 => 10.15 degrees C
+  // 31337 => 313.37 degrees C
 
   // set the digital pin as output:
   pinMode(ledPin, OUTPUT);
@@ -170,7 +173,9 @@ void loop() {
       strip.setPixelColor(0, strip.Color(0, 0, 255));
       strip.show();
     }
-  } else {
+
+  } else { //else if ( initDone == false)
+
 
     //---check every 5 seconds if SD card is present
     if (millis() - sdCard_checkTimer > 5000) {
@@ -178,111 +183,117 @@ void loop() {
       sdCard_found = setup_sd();
     }
 
-    //--check SCD30 sensor every n seconds
-    if (millis() - checkTimer > checkInterval) {
-      checkTimer = millis();
+    bool isInMenu = checkMenu();
 
-      //        loop_rtc();
-      //    loop_sd();
+    //    bool isInMenu = false;
+    if (isInMenu == false) {
+      //--check SCD30 sensor every n seconds
+      if (millis() - checkTimer > checkInterval) {
+        checkTimer = millis();
 
-      display.clearDisplay();
-      //    display.setCursor(0, 0);
+        //        loop_rtc();
+        //    loop_sd();
 
-      display.setTextSize(1);
-      //    display.setCursor(0, 0);
-      //    display.print("v:");
-      //    display.setCursor(10, 0);
-      //    display.println(verNumber, 1);
+        display.clearDisplay();
+        //    display.setCursor(0, 0);
 
-      DateTime now = rtc.now();
-      display.setCursor(0, 0);
-      display.print(now.timestamp(DateTime::TIMESTAMP_TIME));
+        display.setTextSize(1);
+        //    display.setCursor(0, 0);
+        //    display.print("v:");
+        //    display.setCursor(10, 0);
+        //    display.println(verNumber, 1);
 
-      if (scd30.dataReady()) {
+        DateTime now = rtc.now();
+        display.setCursor(0, 0);
+        display.print(now.timestamp(DateTime::TIMESTAMP_TIME));
 
-        Serial.println("Data available!");
+        if (scd30.dataReady()) {
 
-        if (!scd30.read()) {
-          Serial.println("Error reading sensor data");
-          display.println("READ ERR");
-          display.display();
-          return;
-        }
+          Serial.println("Data available!");
 
-        cur_temperature = scd30.temperature;
-        cur_co2 = scd30.eCO2;
-        cur_humidity = scd30.relative_humidity;
-
-
-        Serial.print("eCO2: ");
-        Serial.print(cur_co2, 3);
-        Serial.println(" ppm");
-        Serial.println("");
-
-
-        cur_measuredvbat = analogRead(VBATPIN);
-        cur_measuredvbat *= 2;    // we divided by 2, so multiply back
-        cur_measuredvbat *= 3.3;  // Multiply by 3.3V, our reference voltage
-        cur_measuredvbat /= 1024; // convert to voltage
-
-        if (cur_co2 > 0 && millis() - writeTimer > writeInterval) {
-          writeTimer = millis();
-          logTo_sd(cur_measuredvbat, cur_co2, cur_temperature, cur_humidity);
-        }
-
-      } //end if (scd30.dataReady())
-
-
-      if (sdCard_found == true) {
-
-        if (cur_measuredvbat <= 3.3 ) {
-          if (vbat_toggleShow == true) {
-            display.setCursor(55, 0);
-            display.println(cur_measuredvbat);
-            display.setCursor(80, 0);
-            display.print("V");
+          if (!scd30.read()) {
+            Serial.println("Error reading sensor data");
+            display.println("READ ERR");
+            display.display();
+            return;
           }
-          vbat_toggleShow = !vbat_toggleShow;
+
+          cur_temperature = scd30.temperature;
+          cur_co2 = scd30.eCO2;
+          cur_humidity = scd30.relative_humidity;
+
+
+          Serial.print("eCO2: ");
+          Serial.print(cur_co2, 3);
+          Serial.println(" ppm");
+          Serial.println("");
+
+
+          cur_measuredvbat = analogRead(VBATPIN);
+          cur_measuredvbat *= 2;    // we divided by 2, so multiply back
+          cur_measuredvbat *= 3.3;  // Multiply by 3.3V, our reference voltage
+          cur_measuredvbat /= 1024; // convert to voltage
+
+          if (cur_co2 > 0 && millis() - writeTimer > writeInterval) {
+            writeTimer = millis();
+            logTo_sd(cur_measuredvbat, cur_co2, cur_temperature, cur_humidity);
+          }
+
+        } //end if (scd30.dataReady())
+
+
+        if (sdCard_found == true) {
+
+          if (cur_measuredvbat <= 3.3 ) {
+            if (vbat_toggleShow == true) {
+              display.setCursor(55, 0);
+              display.println(cur_measuredvbat);
+              display.setCursor(80, 0);
+              display.print("V");
+            }
+            vbat_toggleShow = !vbat_toggleShow;
+          } else {
+            display.setCursor(55, 0);
+            display.println(cur_humidity, 1);
+            display.setCursor(80, 0);
+            display.print("%");
+          }
+
+          display.setCursor(95, 0);
+          display.print(cur_temperature, 1);
+          display.setCursor(120, 0);
+          display.print("C");
+
         } else {
           display.setCursor(55, 0);
-          display.println(cur_humidity, 1);
-          display.setCursor(80, 0);
-          display.print("%");
+          display.println("NO SD-CARD!");
         }
 
-        display.setCursor(95, 0);
-        display.print(cur_temperature, 1);
-        display.setCursor(120, 0);
-        display.print("C");
+        display.setCursor(100, 10);
+        display.println(" CO2");
+        display.setCursor(100, 20);
+        display.println(" ppm");
 
+        display.setTextSize(2);
+        display.setCursor(15, 15);
+        display.print(cur_co2, 1);
+        display.display();
+
+      } //end if (millis() - writeTimer > writeInterval)
+
+      if (cur_co2 > bad_co2) {
+        fadeNeoPixel(true);
       } else {
-        display.setCursor(55, 0);
-        display.println("NO SD-CARD!");
+        fadeNeoPixel(false);
       }
-
-      display.setCursor(100, 10);
-      display.println(" CO2");
-      display.setCursor(100, 20);
-      display.println(" ppm");
-
-      display.setTextSize(2);
-      display.setCursor(15, 15);
-      display.print(cur_co2, 1);
-      display.display();
-
-    } //end if (millis() - writeTimer > writeInterval)
-
-    if (cur_co2 > bad_co2) {
-      fadeNeoPixel(true);
-    } else {
-      fadeNeoPixel(false);
-    }
-
+    }//end if isInMenu == false
   }//else end if initDone == false
+
+  //--blink onboard LED to indicate code is running
   blink_it();
 
-  //  delay(100);
 }
+
 
 void blink_it()
 {
