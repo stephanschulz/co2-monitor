@@ -11,7 +11,7 @@ RTC_PCF8523 rtc;
 #define NEO_PIN 8
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
-float verNumber = 2.2;
+int verNumber = 3;
 int bad_co2 = 1100;
 
 Adafruit_SCD30  scd30;
@@ -93,7 +93,7 @@ void setup(void) {
 
   //only set those once, NOT every time we start the device
   //  scd30.setAltitudeOffset(233); //in Montreal 233 m above sea level
-//    scd30.setTemperatureOffset(1200);
+  scd30.setTemperatureOffset(0);
   // 1015 => 10.15 degrees C
   // 31337 => 313.37 degrees C
 
@@ -115,6 +115,8 @@ void setup(void) {
   display.setRotation(0);
 
   sdCard_found = setup_sd();
+
+  delay(2000);
   setup_rtc();
 
   initDone = false;
@@ -122,7 +124,7 @@ void setup(void) {
   checkTimer = millis();
   writeTimer = millis();
 
-  Serial.print("setup done");
+  Serial.println("setup done");
 }
 
 
@@ -137,6 +139,26 @@ void loop() {
       Serial.print("version ");
       Serial.println(verNumber);
 
+      Serial.print("date: ");
+      Serial.print(F(__DATE__));
+      Serial.print(", time: ");
+      Serial.print(F(__TIME__));
+      Serial.println();
+
+      String dataString = "";
+      DateTime now = rtc.now();
+      dataString += String(now.year(), DEC);
+      dataString += '/';
+      dataString += String(now.month(), DEC);
+      dataString += '/';
+      dataString += String(now.day(), DEC);
+      dataString += ",";
+      dataString += String(now.hour(), DEC);
+      dataString += ':';
+      dataString += String(now.minute(), DEC);
+      dataString += ':';
+      dataString += String(now.second(), DEC);
+      Serial.println(dataString);
 
       if (scd30.selfCalibrationEnabled()) {
         Serial.print("Self calibration enabled");
@@ -165,9 +187,20 @@ void loop() {
       display.clearDisplay();
       display.setTextSize(2);
       display.setCursor(0, 0);
-      display.print("version:");
+      display.print("version");
+      display.setCursor(90, 0);
+      display.println(verNumber);
+
+      cur_measuredvbat = analogRead(VBATPIN);
+      cur_measuredvbat *= 2;    // we divided by 2, so multiply back
+      cur_measuredvbat *= 3.3;  // Multiply by 3.3V, our reference voltage
+      cur_measuredvbat /= 1024; // convert to voltage
+
       display.setCursor(0, 15);
-      display.println(verNumber, 1);
+      display.print("battery");
+      display.setCursor(90, 15);
+      display.println(cur_measuredvbat, 1);
+
       display.display();
 
       strip.setPixelColor(0, strip.Color(0, 0, 255));
@@ -244,7 +277,7 @@ void loop() {
 
         if (sdCard_found == true) {
 
-          if (cur_measuredvbat <= 3.3 ) {
+          if (cur_measuredvbat < 3.67 ) {
             if (vbat_toggleShow == true) {
               display.setCursor(55, 0);
               display.println(cur_measuredvbat);
@@ -253,10 +286,18 @@ void loop() {
             }
             vbat_toggleShow = !vbat_toggleShow;
           } else {
-            display.setCursor(55, 0);
-            display.println(cur_humidity, 1);
-            display.setCursor(80, 0);
-            display.print("%");
+            vbat_toggleShow = true;
+            if (millis() % 20000 < 10000) {
+              display.setCursor(55, 0);
+              display.println(cur_humidity, 1);
+              display.setCursor(80, 0);
+              display.print("%");
+            } else {
+              display.setCursor(55, 0);
+              display.println(cur_measuredvbat);
+              display.setCursor(80, 0);
+              display.print("V");
+            }
           }
 
           display.setCursor(95, 0);

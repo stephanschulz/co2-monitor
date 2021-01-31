@@ -9,6 +9,8 @@ void setup_rtc() {
     Serial.println("Couldn't find RTC");
     Serial.flush();
     abort();
+  }else{
+    Serial.println("setup_rtc()");
   }
 
   if (! rtc.initialized() || rtc.lostPower()) {
@@ -16,6 +18,11 @@ void setup_rtc() {
     // When time needs to be set on a new device, or after a power loss, the
     // following line sets the RTC to the date & time this sketch was compiled
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+//    Serial.print("date: ");
+//    Serial.print(F(__DATE__));
+//    Serial.print(", time: ");
+//    Serial.print(F(__TIME__));
+//    Serial.println();
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
@@ -37,8 +44,8 @@ void setup_rtc() {
   // to be restarted by clearing the STOP bit. Let's do this to ensure
   // the RTC is running.
   rtc.start();
-  
-   // The PCF8523 can be calibrated for:
+
+  // The PCF8523 can be calibrated for:
   //        - Aging adjustment
   //        - Temperature compensation
   //        - Accuracy tuning
@@ -63,7 +70,7 @@ void setup_rtc() {
 }
 
 void loop_rtc() {
-//  DateTime time = rtc.now();
+  //  DateTime time = rtc.now();
 
   /*
     //Full Timestamp
