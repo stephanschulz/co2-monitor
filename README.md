@@ -6,7 +6,7 @@ With classrooms being a source of COVID-19 outbreaks I wanted to make use of C02
 ![One full school day](https://github.com/stephanschulz/co2-monitor/blob/main/co2_graph_2021-01-22.png)
 ![Front](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_19241.jpg)
 ![Back](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_19251.jpg)
-![As pendant](https://github.com/stephanschulz/co2-monitor/blob/main/EsWPGzsXMAAlSyZ.jpg)
+![As pendant](https://github.com/stephanschulz/co2-monitor/blob/main/EsWPGzsXMAAlSyZ.jpeg)
 The Arduino for the feather M4 express reads and records the CO2 levels, temperature, relative humidity, current time, and battery voltage.
 
 The repo also includes the macOS numbers file i used to make the data graph, as well as an exported file from numbers to excel. And here is a [google sheet](https://docs.google.com/spreadsheets/d/10woo27n-r7kHz9u2NyxbAo-_cQwC7mvG9KntwrtiVws/edit?usp=sharing) (but without the temperature plot) 
