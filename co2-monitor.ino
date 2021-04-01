@@ -11,7 +11,7 @@ RTC_PCF8523 rtc;
 #define NEO_PIN 8
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
-int verNumber = 3;
+int verNumber = 6;
 int bad_co2 = 1100;
 
 Adafruit_SCD30  scd30;
@@ -56,9 +56,11 @@ bool sdCard_found;
 void setup(void) {
   Serial.begin(115200);
   //  while (!Serial) delay(10);     // will pause Zero, Leonardo, etc until serial console opens
+
+
+
+
   delay(500);
-
-
 
   Serial.println("SCD30 OLED eCO2 meter!");
   // Try to initialize!
@@ -70,6 +72,8 @@ void setup(void) {
   }
   Serial.println("SCD30 Found!");
 
+  delay(2000);
+  setup_rtc();
 
   //---OLED display
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
@@ -116,8 +120,7 @@ void setup(void) {
 
   sdCard_found = setup_sd();
 
-  delay(2000);
-  setup_rtc();
+
 
   initDone = false;
   initTimer = millis();
@@ -280,16 +283,19 @@ void loop() {
           if (cur_measuredvbat < 3.67 ) {
             if (vbat_toggleShow == true) {
               display.setCursor(55, 0);
-              display.println(cur_measuredvbat);
+              display.print(cur_measuredvbat);
               display.setCursor(80, 0);
               display.print("V");
+            } else {
+              display.setCursor(55, 0);
+              display.println("LOW!");
             }
             vbat_toggleShow = !vbat_toggleShow;
           } else {
             vbat_toggleShow = true;
             if (millis() % 20000 < 10000) {
               display.setCursor(55, 0);
-              display.println(cur_humidity, 1);
+              display.print(cur_humidity, 1);
               display.setCursor(80, 0);
               display.print("%");
             } else {

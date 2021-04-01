@@ -9,20 +9,28 @@ void setup_rtc() {
     Serial.println("Couldn't find RTC");
     Serial.flush();
     abort();
-  }else{
+  } else {
     Serial.println("setup_rtc()");
   }
 
-  if (! rtc.initialized() || rtc.lostPower()) {
-    Serial.println("RTC is NOT initialized, let's set the time!");
+//TODO: there needs to be a better way
+//for now i upload code with initNewTime == true so that RTC gets correct time set
+//and right after upload again with initNewTime == false so that in next reboots time does not get set again
+//  bool initNewTime = true;
+bool initNewTime = false;
+  if (initNewTime == true) {
+    //  if (! rtc.initialized() || rtc.lostPower()) {
+    // if (! rtc.isrunning()) {
+    //    Serial.println("RTC is NOT initialized, let's set the time!");
     // When time needs to be set on a new device, or after a power loss, the
     // following line sets the RTC to the date & time this sketch was compiled
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-//    Serial.print("date: ");
-//    Serial.print(F(__DATE__));
-//    Serial.print(", time: ");
-//    Serial.print(F(__TIME__));
-//    Serial.println();
+    Serial.println("rtc.adjust()");
+    Serial.print("date: ");
+    Serial.print(F(__DATE__));
+    Serial.print(", time: ");
+    Serial.print(F(__TIME__));
+    Serial.println();
     // This line sets the RTC with an explicit date & time, for example to set
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
