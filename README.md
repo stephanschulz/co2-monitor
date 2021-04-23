@@ -35,7 +35,7 @@ The repo also includes the macOS numbers file i used to make the data graph, as 
 - https://learn.adafruit.com/adafruit-adalogger-featherwing
 
 
-
-:-------------------------:|:-------------------------:
-![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_0010.jpg) | ![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9965.jpg)
-![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9966.jpg) | ![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9967.jpg)
+|                A                   |                B                  |
+|:-------------------------:|:-------------------------:|
+| ![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_0010.jpg) | ![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9965.jpg) |
+| ![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9966.jpg) | ![](https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9967.jpg) |
