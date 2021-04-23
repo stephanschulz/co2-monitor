@@ -37,5 +37,5 @@ The repo also includes the macOS numbers file i used to make the data graph, as 
 
 | | | |
 |:-------------------------:|:-------------------------:|
-|<img width="1604" src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_0010.jpg">  |  <img width="1604" src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9965.jpg">
-|<img width="1604"  src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9966.jpg">  |  <img width="1604" src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9967.jpg">
+|<img width="1604" src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_0010.jpg">  |  <img width="1604" src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9965.jpg"> |
+|<img width="1604"  src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9966.jpg">  |  <img width="1604" src="https://github.com/stephanschulz/co2-monitor/blob/main/IMG_9967.jpg"> |
